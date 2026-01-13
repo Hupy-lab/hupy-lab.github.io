@@ -16,14 +16,25 @@
         .navbar { box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .table-responsive { margin-top: 20px; }
         .alert { border-radius: 10px; }
+        .navbar-brand { display: flex; align-items: center; flex-wrap: wrap; } /* Responsif untuk brand */
         .navbar-brand img { height: 80px; margin-right: 10px; }
+        .navbar-brand span { font-size: 1rem; } /* Ukuran text brand */
+        /* Media query untuk mobile */
+        @media (max-width: 768px) {
+            .navbar-brand img { height: 50px; margin-bottom: 5px; } /* Logo lebih kecil di mobile */
+            .navbar-brand span { font-size: 0.9rem; display: block; } /* Text vertikal di mobile */
+            .navbar-brand { flex-direction: column; text-align: center; } /* Susun vertikal */
+            .container { padding-left: 15px; padding-right: 15px; } /* Padding lebih kecil */
+            .card { margin-bottom: 20px; } /* Margin card di mobile */
+            .table-responsive { font-size: 0.9rem; } /* Font tabel lebih kecil */
+        }
     </style>
 </head>
 <body>
     <!-- Navbar Header dengan Logo DJ PSDKP -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary"> <!-- Diubah ke bg-primary (biru KKP) -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+            <a class="navbar-brand fw-bold" href="#">
                 <img src="Logo_KKP.png" alt="Logo KKP">
                 <span>KEMENTERIAN KELAUTAN DAN PERIKANAN</span>
             </a>
@@ -33,7 +44,8 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                    <img src="Logo_PSDKP.png" alt="Logo PSDKP" height="80">
+                        <img src="Logo_PSDKP.png" alt="Logo PSDKP" height="80" class="d-none d-md-block"> <!-- Logo PSDKP hanya di desktop -->
+                        <img src="Logo_PSDKP.png" alt="Logo PSDKP" height="50" class="d-block d-md-none"> <!-- Logo PSDKP lebih kecil di mobile -->
                     </li>
                 </ul>
             </div>
@@ -43,7 +55,7 @@
     <div class="container mt-5">
         <!-- Card Utama untuk Upload -->
         <div class="row justify-content-center">
-            <div class="col-lg-8">
+            <div class="col-lg-8 col-md-10 col-12"> <!-- Responsif: col-12 untuk mobile -->
                 <div class="card mb-4">
                     <div class="card-header bg-success text-white text-center">
                         <h4 class="mb-0"><i class="bi bi-file-earmark-spreadsheet me-2"></i>Upload file Excel</h4>
@@ -72,7 +84,7 @@
 
         <!-- Card untuk Tabel Data -->
         <div class="row justify-content-center">
-            <div class="col-lg-10">
+            <div class="col-lg-10 col-md-12 col-12"> <!-- Responsif: col-12 untuk mobile -->
                 <div class="card" id="dataCard" style="display: none;">
                     <div class="card-header bg-light">
                         <h5 class="mb-0"><i class="bi bi-table me-2"></i>Data dari Excel</h5>
