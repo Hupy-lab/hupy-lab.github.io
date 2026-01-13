@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSDKP Belawan</title>
+    <!-- Bootstrap CSS untuk UI modern -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons untuk ikon -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .card { box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: none; }
+        .btn-whatsapp { background-color: #d32548; border-color: #d32548; color: white; }
+        .btn-whatsapp:hover { background-color: #18b765; border-color: #18b765; transform: scale(1.05); transition: 0.2s; }
+        .navbar { box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .table-responsive { margin-top: 20px; }
+        .alert { border-radius: 10px; }
+        .navbar-brand img { height: 80px; margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <!-- Navbar Header dengan Logo DJ PSDKP -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary"> <!-- Diubah ke bg-primary (biru KKP) -->
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+                <img src="Logo_KKP.png" alt="Logo KKP">
+                <span>KEMENTERIAN KELAUTAN DAN PERIKANAN</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                    <img src="Logo_PSDKP.png" alt="Logo PSDKP" height="80">
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <!-- Card Utama untuk Upload -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white text-center">
+                        <h4 class="mb-0"><i class="bi bi-file-earmark-spreadsheet me-2"></i>Upload file Excel</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted text-center"></p>
+                        
+                        <!-- Form Upload -->
+                        <form>
+                            <div class="mb-3">
+                                <label for="excelFile" class="form-label fw-semibold"><i class="bi bi-upload me-1"></i>Pilih File Excel</label>
+                                <input type="file" class="form-control" id="excelFile" accept=".xlsx,.xls" required>
+                                <div class="form-text">Pastikan file memiliki header yang tepat untuk kolom.</div>
+                            </div>
+                            <div class="d-grid">
+                                <button type="button" class="btn btn-whatsapp btn-lg" onclick="processExcel()"><i class="bi bi-play-circle-fill me-2"></i>Proses Excel</button>
+                            </div>
+                        </form>
+                        
+                        <!-- Alert Box untuk Feedback -->
+                        <div id="alertBox" class="alert mt-3" style="display: none;" role="alert"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card untuk Tabel Data -->
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card" id="dataCard" style="display: none;">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="bi bi-table me-2"></i>Data dari Excel</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover align-middle">
+                                <thead class="table-success">
+                                    <tr>
+                                        <th scope="col">Nama Pengawas</th>
+                                        <th scope="col">Nomor</th>
+                                        <th scope="col">Pesan</th>
+                                        <th scope="col" class="text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dataBody">
+                                    <!-- Data akan diisi oleh JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center mt-3">
+                            <small class="text-muted">Klik "Kirim" untuk membuka aplikasi WhatsApp langsung dengan pesan pra-disi.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Sederhana -->
+        <footer class="text-center mt-5 py-3 border-top">
+            <p class="mb-0 text-muted">&copy;Stasiun Pengawasan Sumber Daya Kelautan dan Perikanan Belawan.</p>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SheetJS untuk parsing Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <script>
+        let excelData = [];
+
+        // Fungsi untuk menampilkan alert
+        function showAlert(message, type = 'info') {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.className = `alert alert-${type}`;
+            alertBox.innerHTML = `<i class="bi bi-info-circle me-2"></i>${message}`;
+            alertBox.style.display = 'block';
+            setTimeout(() => alertBox.style.display = 'none', 5000);
+        }
+
+        // Fungsi untuk memproses file Excel
+        function processExcel() {
+            const file = document.getElementById('excelFile').files[0];
+            if (!file) {
+                showAlert('Silakan pilih file Excel terlebih dahulu!', 'warning');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                excelData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                const headers = excelData[0];
+                const namaIndex = headers.indexOf('Nama Pengawas');
+                const nomorIndex = headers.indexOf('Nomor');
+                const pesanIndex = headers.indexOf('Pesan');
+
+                if (namaIndex === -1 || nomorIndex === -1 || pesanIndex === -1) {
+                    showAlert('File Excel harus memiliki kolom "Nama Pengawas", "Nomor", dan "Pesan"!', 'danger');
+                    return;
+                }
+
+                const tbody = document.getElementById('dataBody');
+                tbody.innerHTML = '';
+                for (let i = 1; i < excelData.length; i++) {
+                    const row = excelData[i];
+                    const nama = row[namaIndex] || 'N/A';
+                    const nomor = row[nomorIndex];
+                    const pesan = row[pesanIndex];
+                    if (nomor && pesan) {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${nama}</td>
+                            <td>${nomor}</td>
+                            <td>${pesan}</td>
+                            <td class="text-center">
+                                <button class="btn btn-whatsapp btn-sm" onclick="sendToWhatsApp('${nomor}', '${encodeURIComponent(pesan)}')">
+                                    <i class="bi bi-send me-1"></i>Kirim
+                                </button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    }
+                }
+                document.getElementById('dataCard').style.display = 'block';
+                showAlert('Data Excel berhasil diproses! Gulir ke bawah untuk melihat tabel.', 'success');
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // Fungsi untuk kirim ke WhatsApp (deep link ke app)
+        function sendToWhatsApp(phone, message) {
+            // Gunakan deep link untuk aplikasi WhatsApp
+            const url = `whatsapp://send?phone=${phone}&text=${message}`;
+            window.location.href = url; // Langsung buka app, bukan tab baru
+            showAlert('Mencoba membuka aplikasi WhatsApp. Jika tidak bekerja, pastikan app terinstall!', 'info');
+        }
+    </script>
+</body>
+</html>
