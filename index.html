@@ -10,23 +10,52 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .card { box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: none; }
-        .btn-whatsapp { background-color: #d32548; border-color: #d32548; color: white; }
-        .btn-whatsapp:hover { background-color: #18b765; border-color: #18b765; transform: scale(1.05); transition: 0.2s; }
+        .card { box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: none; animation: fadeIn 1s ease-in; }
+        .btn-whatsapp { background-color: #d32548; border-color: #d32548; color: white; transition: all 0.3s ease; }
+        .btn-whatsapp:hover { background-color: #18b765; border-color: #18b765; transform: scale(1.05); box-shadow: 0 0 10px rgba(24, 183, 101, 0.5); }
         .navbar { box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .table-responsive { margin-top: 20px; }
-        .alert { border-radius: 10px; }
-        .navbar-brand { display: flex; align-items: center; flex-wrap: wrap; } /* Responsif untuk brand */
+        .alert { border-radius: 10px; animation: pulse 0.5s ease-in-out; }
+        .navbar-brand { display: flex; align-items: center; flex-wrap: wrap; }
         .navbar-brand img { height: 80px; margin-right: 10px; }
-        .navbar-brand span { font-size: 1rem; } /* Ukuran text brand */
-        /* Media query untuk mobile */
+        .navbar-brand span { font-size: 1rem; }
+        #dataCard { animation: slideInUp 0.8s ease-out; }
+        /* Keyframes untuk animasi */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        /* Media query untuk tablet dan smartphone besar (768px ke bawah) */
         @media (max-width: 768px) {
-            .navbar-brand img { height: 50px; margin-bottom: 5px; } /* Logo lebih kecil di mobile */
-            .navbar-brand span { font-size: 0.9rem; display: block; } /* Text vertikal di mobile */
-            .navbar-brand { flex-direction: column; text-align: center; } /* Susun vertikal */
-            .container { padding-left: 15px; padding-right: 15px; } /* Padding lebih kecil */
-            .card { margin-bottom: 20px; } /* Margin card di mobile */
-            .table-responsive { font-size: 0.9rem; } /* Font tabel lebih kecil */
+            .navbar-brand img { height: 50px; margin-bottom: 5px; }
+            .navbar-brand span { font-size: 0.9rem; display: block; }
+            .navbar-brand { flex-direction: column; text-align: center; }
+            .container { padding-left: 10px; padding-right: 10px; }
+            .card { margin-bottom: 15px; }
+            .table-responsive { font-size: 0.85rem; }
+            .btn-whatsapp { font-size: 0.9rem; padding: 8px 12px; }
+        }
+        /* Media query untuk smartphone kecil (576px ke bawah) */
+        @media (max-width: 576px) {
+            .navbar-brand img { height: 40px; margin-bottom: 3px; }
+            .navbar-brand span { font-size: 0.8rem; }
+            .container { padding-left: 5px; padding-right: 5px; }
+            .card { margin-bottom: 10px; padding: 10px; }
+            .card-header h4 { font-size: 1.1rem; }
+            .table-responsive { font-size: 0.8rem; overflow-x: auto; } /* Scroll horizontal */
+            .btn-whatsapp { width: 100%; font-size: 0.85rem; padding: 6px 10px; margin-bottom: 5px; } /* Full width */
+            .form-label { font-size: 0.9rem; }
+            .alert { font-size: 0.85rem; padding: 8px; }
+            footer p { font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -44,18 +73,18 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <img src="Logo_PSDKP.png" alt="Logo PSDKP" height="80" class="d-none d-md-block"> <!-- Logo PSDKP hanya di desktop -->
-                        <img src="Logo_PSDKP.png" alt="Logo PSDKP" height="50" class="d-block d-md-none"> <!-- Logo PSDKP lebih kecil di mobile -->
+                        <img src="Logo_PSDKP.png" alt="Logo PSDKP" height="80" class="d-none d-md-block">
+                        <img src="Logo_PSDKP.png" alt="Logo PSDKP" height="50" class="d-block d-md-none">
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-5">
+    <div class="container mt-3"> <!-- Margin top dikurangi untuk smartphone -->
         <!-- Card Utama untuk Upload -->
         <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-10 col-12"> <!-- Responsif: col-12 untuk mobile -->
+            <div class="col-lg-8 col-md-10 col-sm-12 col-12"> <!-- Full width di smartphone -->
                 <div class="card mb-4">
                     <div class="card-header bg-success text-white text-center">
                         <h4 class="mb-0"><i class="bi bi-file-earmark-spreadsheet me-2"></i>Upload file Excel</h4>
@@ -71,7 +100,7 @@
                                 <div class="form-text">Pastikan file memiliki header yang tepat untuk kolom.</div>
                             </div>
                             <div class="d-grid">
-                                <button type="button" class="btn btn-whatsapp btn-lg" onclick="processExcel()"><i class="bi bi-play-circle-fill me-2"></i>Proses Excel</button>
+                                <button type="button" class="btn btn-whatsapp btn-lg" id="processBtn" onclick="processExcel()"><i class="bi bi-play-circle-fill me-2"></i>Proses Excel</button>
                             </div>
                         </form>
                         
@@ -84,7 +113,7 @@
 
         <!-- Card untuk Tabel Data -->
         <div class="row justify-content-center">
-            <div class="col-lg-10 col-md-12 col-12"> <!-- Responsif: col-12 untuk mobile -->
+            <div class="col-lg-10 col-md-12 col-sm-12 col-12"> <!-- Full width di smartphone -->
                 <div class="card" id="dataCard" style="display: none;">
                     <div class="card-header bg-light">
                         <h5 class="mb-0"><i class="bi bi-table me-2"></i>Data dari Excel</h5>
@@ -114,7 +143,7 @@
         </div>
 
         <!-- Footer Sederhana -->
-        <footer class="text-center mt-5 py-3 border-top">
+        <footer class="text-center mt-3 py-2 border-top"> <!-- Padding dikurangi -->
             <p class="mb-0 text-muted">&copy;Stasiun Pengawasan Sumber Daya Kelautan dan Perikanan Belawan.</p>
         </footer>
     </div>
@@ -136,13 +165,18 @@
             setTimeout(() => alertBox.style.display = 'none', 5000);
         }
 
-        // Fungsi untuk memproses file Excel
+        // Fungsi untuk memproses file Excel dengan loading animasi
         function processExcel() {
             const file = document.getElementById('excelFile').files[0];
             if (!file) {
                 showAlert('Silakan pilih file Excel terlebih dahulu!', 'warning');
                 return;
             }
+
+            // Tambahkan spinner loading
+            const btn = document.getElementById('processBtn');
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Memproses...';
+            btn.disabled = true;
 
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -159,6 +193,8 @@
 
                 if (namaIndex === -1 || nomorIndex === -1 || pesanIndex === -1) {
                     showAlert('File Excel harus memiliki kolom "Nama Pengawas", "Nomor", dan "Pesan"!', 'danger');
+                    btn.innerHTML = '<i class="bi bi-play-circle-fill me-2"></i>Proses Excel';
+                    btn.disabled = false;
                     return;
                 }
 
@@ -186,6 +222,9 @@
                 }
                 document.getElementById('dataCard').style.display = 'block';
                 showAlert('Data Excel berhasil diproses! Gulir ke bawah untuk melihat tabel.', 'success');
+                // Reset button
+                btn.innerHTML = '<i class="bi bi-play-circle-fill me-2"></i>Proses Excel';
+                btn.disabled = false;
             };
             reader.readAsArrayBuffer(file);
         }
