@@ -13,7 +13,7 @@
         .card { box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: none; animation: fadeIn 1s ease-in; }
         .btn-whatsapp { background-color: #d32548; border-color: #d32548; color: white; transition: all 0.3s ease; }
         .btn-whatsapp:hover { background-color: #18b765; border-color: #18b765; transform: scale(1.05); box-shadow: 0 0 10px rgba(24, 183, 101, 0.5); }
-        .navbar { box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .navbar { box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: relative; } /* Relative untuk absolute positioning */
         .table-responsive { margin-top: 20px; }
         .alert { border-radius: 10px; animation: pulse 0.5s ease-in-out; }
         .navbar-brand { display: flex; align-items: center; flex-wrap: wrap; }
@@ -36,9 +36,10 @@
         }
         /* Media query untuk tablet dan smartphone besar (768px ke bawah) */
         @media (max-width: 768px) {
-            .navbar-brand img { height: 50px; margin-bottom: 5px; }
-            .navbar-brand span { font-size: 0.9rem; display: block; }
-            .navbar-brand { flex-direction: column; text-align: center; }
+            .navbar-brand { display: none; } /* Hide brand kiri di mobile */
+            .navbar-nav { display: none; } /* Hide nav kanan di mobile */
+            .centered-logos { display: flex !important; flex-direction: column; align-items: center; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); } /* Center kedua logo */
+            .centered-logos img { height: 40px; margin: 2px 0; }
             .container { padding-left: 10px; padding-right: 10px; }
             .card { margin-bottom: 15px; }
             .table-responsive { font-size: 0.85rem; }
@@ -46,13 +47,12 @@
         }
         /* Media query untuk smartphone kecil (576px ke bawah) */
         @media (max-width: 576px) {
-            .navbar-brand img { height: 40px; margin-bottom: 3px; }
-            .navbar-brand span { font-size: 0.8rem; }
+            .centered-logos img { height: 35px; }
             .container { padding-left: 5px; padding-right: 5px; }
             .card { margin-bottom: 10px; padding: 10px; }
             .card-header h4 { font-size: 1.1rem; }
-            .table-responsive { font-size: 0.8rem; overflow-x: auto; } /* Scroll horizontal */
-            .btn-whatsapp { width: 100%; font-size: 0.85rem; padding: 6px 10px; margin-bottom: 5px; } /* Full width */
+            .table-responsive { font-size: 0.8rem; overflow-x: auto; }
+            .btn-whatsapp { width: 100%; font-size: 0.85rem; padding: 6px 10px; margin-bottom: 5px; }
             .form-label { font-size: 0.9rem; }
             .alert { font-size: 0.85rem; padding: 8px; }
             footer p { font-size: 0.8rem; }
@@ -60,7 +60,7 @@
     </style>
 </head>
 <body>
-    <!-- Navbar Header dengan Logo DJ PSDKP -->
+    <!-- Navbar Header dengan Logo Gabung di Mobile -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="#">
@@ -73,18 +73,22 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <img src="Logo_PSDKP.png" alt="Logo PSDKP" height="80" class="d-none d-md-block">
-                        <img src="Logo_PSDKP.png" alt="Logo PSDKP" height="50" class="d-block d-md-none">
+                        <img src="Logo_PSDKP.png" alt="Logo PSDKP" height="80">
                     </li>
                 </ul>
+            </div>
+            <!-- Div untuk logo gabung di mobile -->
+            <div class="centered-logos" style="display: none;">
+                <img src="Logo_KKP.png" alt="Logo KKP">
+                <img src="Logo_PSDKP.png" alt="Logo PSDKP">
             </div>
         </div>
     </nav>
 
-    <div class="container mt-3"> <!-- Margin top dikurangi untuk smartphone -->
+    <div class="container mt-3">
         <!-- Card Utama untuk Upload -->
         <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-10 col-sm-12 col-12"> <!-- Full width di smartphone -->
+            <div class="col-lg-8 col-md-10 col-sm-12 col-12">
                 <div class="card mb-4">
                     <div class="card-header bg-success text-white text-center">
                         <h4 class="mb-0"><i class="bi bi-file-earmark-spreadsheet me-2"></i>Upload file Excel</h4>
@@ -113,7 +117,7 @@
 
         <!-- Card untuk Tabel Data -->
         <div class="row justify-content-center">
-            <div class="col-lg-10 col-md-12 col-sm-12 col-12"> <!-- Full width di smartphone -->
+            <div class="col-lg-10 col-md-12 col-sm-12 col-12">
                 <div class="card" id="dataCard" style="display: none;">
                     <div class="card-header bg-light">
                         <h5 class="mb-0"><i class="bi bi-table me-2"></i>Data dari Excel</h5>
@@ -143,7 +147,7 @@
         </div>
 
         <!-- Footer Sederhana -->
-        <footer class="text-center mt-3 py-2 border-top"> <!-- Padding dikurangi -->
+        <footer class="text-center mt-3 py-2 border-top">
             <p class="mb-0 text-muted">&copy;Stasiun Pengawasan Sumber Daya Kelautan dan Perikanan Belawan.</p>
         </footer>
     </div>
